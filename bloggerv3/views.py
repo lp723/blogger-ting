@@ -1,12 +1,17 @@
 from django.shortcuts import render
-from google_auth_oauthlib.flow import Flow
-import googleapiclient.discovery
-from google.oauth2 import credentials
 from django.conf import settings
 from django.shortcuts import redirect
 from django.http import HttpResponse
-
+from django.contrib.sessions.backends.db import SessionStore
+from django.core import serializers
+import googleapiclient.discovery
+from google_auth_oauthlib.flow import Flow
+from google.oauth2 import credentials
+from pprint import pprint
 import os
+#from django.core.cache import cache
+
+from .serializers import GoogleCredentialsSerializer
 
 def oauth2_callback(request):
     flow = Flow.from_client_secrets_file(
@@ -16,9 +21,10 @@ def oauth2_callback(request):
     )
     flow.fetch_token(authorization_response=request.build_absolute_uri())
     credentials = flow.credentials
-    # Store the credentials in the user's session or database as needed
-    # Redirect to the page to create a blog post
-    return HttpResponse("OAuth2 callback successful")
+
+    serializer = GoogleCredentialsSerializer(credentials.__dict__)
+    request.session['credentials'] = serializer.data
+    return redirect('create_blog_post')
 
 def authorize(request):
     flow = Flow.from_client_secrets_file(
@@ -31,17 +37,16 @@ def authorize(request):
     return redirect(authorization_url)
     
 
-def create_blog_post(request):
-    # Retrieve the credentials from the user's session or database
-    # credentials = ...
-    
-    # Check if credentials have expired, and refresh if needed
-    if credentials.expired and credentials.refresh_token:
+def create_blog_post(request, ):
+
+    credentials = request.session['credentials']
+    credentials.expired
+    if credentials.expired:
         credentials.refresh(Request())
         # Store the refreshed credentials if needed
     
     service = googleapiclient.discovery.build(
-        'blogger', 'v3', credentials=credentials
+        'blogger', 'v3', credentials=CREDENTIALS
     )
     
     # Create the blog post using the Blogger API
