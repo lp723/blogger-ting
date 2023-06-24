@@ -39,29 +39,28 @@ def authorize(request):
     
 
 def create_blog_post(request, ):
-    print(credentials)
-    print('lol')
-    print(credentials.token)
-
-    ##return HttpResponse('babba booey')
     if credentials.expired:
+        print('expired')
         credentials.refresh(Request())
-         #Store the refreshed credentials if needed
-    
-    service = googleapiclient.discovery.build(
-        'blogger', 'v3', credentials=credentials
-    )
-    
-     #Create the blog post using the Blogger API
-    blog_id = '4787800070143898927'  # Replace with your blog ID
-    post_data = {
-        'kind': 'blogger#post',
-        'blog': {'id': blog_id},
-        'title': 'My Blog Post',
-        'content': '<p>This is my blog post content</p>',
-        'labels': ['label1', 'label2'],
-    }
-    service.posts().insert(blogId=blog_id, body=post_data).execute()
-    
-    return render(request, 'create_post.html', post_data) 
+
+    post_data = {}
+
+    if request.method == 'POST':
+        service = googleapiclient.discovery.build(
+            'blogger', 'v3', credentials=credentials
+        )
+
+        blog_id = '4787800070143898927'  # Replace with your blog ID
+        post_data = {
+            'kind': 'blogger#post',
+            'blog': {'id': blog_id},
+            'title': request.POST.get('title'),
+            'content': request.POST.get('content'),
+            'labels': ['label1', 'label2'],
+        }
+        service.posts().insert(blogId=blog_id, body=post_data).execute()
+
+        return render(request, 'create_post.html', post_data) 
+    else:
+        return render(request, 'create_post.html', post_data) 
 
