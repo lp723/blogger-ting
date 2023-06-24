@@ -63,5 +63,5 @@ def create_blog_post(request, ):
     }
     service.posts().insert(blogId=blog_id, body=post_data).execute()
     
-    # Redirect to a success page or return a success message
+    return render(request, 'create_post.html', post_data) 
 

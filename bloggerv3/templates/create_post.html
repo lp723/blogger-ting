@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Blog</title>
+</head>
+<body>
+    <h1>Create Blog</h1>
+    <form method="post" action="{% url 'create_blog_post' %}">
+        {% csrf_token %}
+        <label for="title">{% csrf_token %}</label><br>
+        <input type="text" id="title" name="title" value="{{ title }}"><br><br>
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50">{{ content }}</textarea><br><br>
+        <input type="submit" value="Create Blog">
+    </form>
+</body>
+</html>
