@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.core import serializers
 import googleapiclient.discovery
 from google_auth_oauthlib.flow import Flow
-from google.oauth2 import credentials
+from google.oauth2.credentials import Credentials
 from pprint import pprint
 import os
 #from django.core.cache import cache
@@ -38,10 +38,9 @@ def authorize(request):
     
 
 def create_blog_post(request, ):
-
-    credentials = request.session['credentials']
+    credentials = Credentials(request.session['credentials'])
     print(credentials)
-    credentials['expiry']
+    print(credentials.expired)
 
     return HttpResponse('babba booey')
     #if credentials.expired:
