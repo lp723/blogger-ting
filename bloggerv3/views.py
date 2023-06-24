@@ -40,25 +40,28 @@ def authorize(request):
 def create_blog_post(request, ):
 
     credentials = request.session['credentials']
-    credentials.expired
-    if credentials.expired:
-        credentials.refresh(Request())
-        # Store the refreshed credentials if needed
+    print(credentials)
+    credentials['expiry']
+
+    return HttpResponse('babba booey')
+    #if credentials.expired:
+    #    credentials.refresh(Request())
+    #     Store the refreshed credentials if needed
     
-    service = googleapiclient.discovery.build(
-        'blogger', 'v3', credentials=CREDENTIALS
-    )
+    #service = googleapiclient.discovery.build(
+    #    'blogger', 'v3', credentials=CREDENTIALS
+    #)
     
     # Create the blog post using the Blogger API
-    blog_id = '4787800070143898927'  # Replace with your blog ID
-    post_data = {
-        'kind': 'blogger#post',
-        'blog': {'id': blog_id},
-        'title': 'My Blog Post',
-        'content': '<p>This is my blog post content</p>',
-        'labels': ['label1', 'label2'],
-    }
-    service.posts().insert(blogId=blog_id, body=post_data).execute()
+    #blog_id = '4787800070143898927'  # Replace with your blog ID
+    #post_data = {
+    #    'kind': 'blogger#post',
+    #    'blog': {'id': blog_id},
+    #    'title': 'My Blog Post',
+    #    'content': '<p>This is my blog post content</p>',
+    #    'labels': ['label1', 'label2'],
+    #}
+    #service.posts().insert(blogId=blog_id, body=post_data).execute()
     
     # Redirect to a success page or return a success message
 
