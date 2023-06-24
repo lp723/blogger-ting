@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join('certs', 'autoblog-1687462837568-bc3f911e2af2.json')
 
 # Application definition
 

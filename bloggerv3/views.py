@@ -12,7 +12,7 @@ import os
 #from django.core.cache import cache
 
 from .serializers import GoogleCredentialsSerializer
-
+credentials = ''
 def oauth2_callback(request):
     flow = Flow.from_client_secrets_file(
         os.path.join('certs', 'client_secret_902884065417-qgsnh4ob092b5n4do6p59vbpma30fgh8.apps.googleusercontent.com.json'),  # Path to your client secrets JSON file
@@ -20,6 +20,7 @@ def oauth2_callback(request):
         redirect_uri=settings.GOOGLE_REDIRECT_URI
     )
     flow.fetch_token(authorization_response=request.build_absolute_uri())
+    global credentials
     credentials = flow.credentials
 
     serializer = GoogleCredentialsSerializer(credentials.__dict__)
@@ -38,29 +39,29 @@ def authorize(request):
     
 
 def create_blog_post(request, ):
-    credentials = Credentials(request.session['credentials'])
     print(credentials)
-    print(credentials.expired)
+    print('lol')
+    print(credentials.token)
 
-    return HttpResponse('babba booey')
-    #if credentials.expired:
-    #    credentials.refresh(Request())
-    #     Store the refreshed credentials if needed
+    ##return HttpResponse('babba booey')
+    if credentials.expired:
+        credentials.refresh(Request())
+         #Store the refreshed credentials if needed
     
-    #service = googleapiclient.discovery.build(
-    #    'blogger', 'v3', credentials=CREDENTIALS
-    #)
+    service = googleapiclient.discovery.build(
+        'blogger', 'v3', credentials=credentials
+    )
     
-    # Create the blog post using the Blogger API
-    #blog_id = '4787800070143898927'  # Replace with your blog ID
-    #post_data = {
-    #    'kind': 'blogger#post',
-    #    'blog': {'id': blog_id},
-    #    'title': 'My Blog Post',
-    #    'content': '<p>This is my blog post content</p>',
-    #    'labels': ['label1', 'label2'],
-    #}
-    #service.posts().insert(blogId=blog_id, body=post_data).execute()
+     #Create the blog post using the Blogger API
+    blog_id = '4787800070143898927'  # Replace with your blog ID
+    post_data = {
+        'kind': 'blogger#post',
+        'blog': {'id': blog_id},
+        'title': 'My Blog Post',
+        'content': '<p>This is my blog post content</p>',
+        'labels': ['label1', 'label2'],
+    }
+    service.posts().insert(blogId=blog_id, body=post_data).execute()
     
     # Redirect to a success page or return a success message
 

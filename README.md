@@ -9,7 +9,7 @@ openssl req -new -x509 -nodes -out cert.pem -keyout key.pem
 AND THEEEEN:
 
 ```
-python manage.py runsslserver --cert ./certs/cert.pem --key ./certs/key.pe
+python manage.py runsslserver --cert ./certs/cert.pem --key ./certs/key.pem
 ```
 
 or
